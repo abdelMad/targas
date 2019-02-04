@@ -1,6 +1,7 @@
 package com.targas.erp.controllers;
 
 import com.targas.erp.dao.IMbrScolariteRepo;
+import com.targas.erp.dao.IUtilisateurRepo;
 import com.targas.erp.models.Etudiant;
 import com.targas.erp.models.MbrScolarite;
 import com.targas.erp.models.Utilisateur;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,12 +21,22 @@ public class LoginController {
     @Autowired
     private IMbrScolariteRepo iMbrScolariteRepo;
 
-    @GetMapping("/login")
-    public String loginPageRender() {
+    @Autowired
+    private IUtilisateurRepo utilisateurRepo;
 
+    @GetMapping("/login")
+    public String loginPageRender(Model model) {
+        Utilisateur utilisateur = new Utilisateur();
+        model.addAttribute("utilisateur", utilisateur);
         return "login";
     }
 
+    @PostMapping("/login")
+    public String ProcessLogin(@ModelAttribute(value = "utilisateur") Utilisateur utilisateur, HttpServletRequest request) {
+        Utilisateur loggedInUser = utilisateurRepo.findByIdentifiantAndMdp(utilisateur.getIdentifiant(), Util.hashString(utilisateur.getMdp()));
+        request.getSession().setAttribute("utilisateur", loggedInUser);
+        return "redirect:";
+    }
     @GetMapping("/init")
     public String init() {
         if (!iMbrScolariteRepo.findById(1).isPresent()) {
@@ -39,8 +52,17 @@ public class LoginController {
         Utilisateur utilisateur = iMbrScolariteRepo.findById(1).get();
         System.out.println(utilisateur instanceof MbrScolarite);
         System.out.println(utilisateur instanceof Etudiant);
-        return "login";
+        return "redirect:";
     }
+
+    @GetMapping("/logout")
+    public String deconnexion(HttpServletRequest request) {
+        request.getSession().removeAttribute("utilisateur");
+        return "redirect:/login";
+    }
+
+
+
 
     @GetMapping("/")
     public String renderAccueil(Model model, HttpServletRequest request){

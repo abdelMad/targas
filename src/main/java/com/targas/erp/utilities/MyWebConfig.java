@@ -17,7 +17,7 @@ public class MyWebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        registry.addInterceptor(loginInterceptor()).addPathPatterns(new String[]{ "/profil"});
+        registry.addInterceptor(loginInterceptor()).addPathPatterns(new String[]{ "/","/profil"});
     }
 
     @Override
