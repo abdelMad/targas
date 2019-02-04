@@ -13,6 +13,8 @@ public class Utilisateur {
     @GeneratedValue
     private int id;
     private String nom;
+    @Column(unique = true)
+    private String identifiant;
     private String prenom;
     private String adresse;
     @Column(unique = true)
