@@ -1,7 +1,9 @@
 package com.targas.erp.controllers;
 
+import com.targas.erp.dao.IAnneeScolaireRepo;
 import com.targas.erp.dao.IMbrScolariteRepo;
 import com.targas.erp.dao.IUtilisateurRepo;
+import com.targas.erp.models.AnneeScolaire;
 import com.targas.erp.models.Etudiant;
 import com.targas.erp.models.MbrScolarite;
 import com.targas.erp.models.Utilisateur;
@@ -14,9 +16,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 
 @Controller
 public class LoginController {
+
+    @Autowired
+    private IAnneeScolaireRepo iAnneeScolaireRepo;
 
     @Autowired
     private IMbrScolariteRepo iMbrScolariteRepo;
@@ -40,6 +46,12 @@ public class LoginController {
     @GetMapping("/init")
     public String init() {
         if (!iMbrScolariteRepo.findById(1).isPresent()) {
+            int currentYear = LocalDate.now().getYear();
+            AnneeScolaire anneeScolaire = new AnneeScolaire();
+            System.out.println(currentYear+"/"+(currentYear+1));
+            anneeScolaire.setNomAnneeScolaire(currentYear+"/"+(currentYear+1));
+            iAnneeScolaireRepo.save(anneeScolaire);
+
             MbrScolarite mbrScolarite = new MbrScolarite();
             mbrScolarite.setNom("Admin");
             mbrScolarite.setPrenom("Admin");
@@ -49,9 +61,9 @@ public class LoginController {
             mbrScolarite.setId(1);
             iMbrScolariteRepo.save(mbrScolarite);
         }
-        Utilisateur utilisateur = iMbrScolariteRepo.findById(1).get();
-        System.out.println(utilisateur instanceof MbrScolarite);
-        System.out.println(utilisateur instanceof Etudiant);
+//        Utilisateur utilisateur = iMbrScolariteRepo.findById(1).get();
+//        System.out.println(utilisateur instanceof MbrScolarite);
+//        System.out.println(utilisateur instanceof Etudiant);
         return "redirect:";
     }
 

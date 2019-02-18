@@ -12,8 +12,8 @@ public class Etudiant extends Utilisateur {
     @Id
     @GeneratedValue
     private int id;
-    @Column(unique = true)
-    private int numEleve;
+//    @Column(unique = true)
+//    private int numEleve;
 
     @ManyToOne
     @JoinColumn(name = "groupeEtudiant")

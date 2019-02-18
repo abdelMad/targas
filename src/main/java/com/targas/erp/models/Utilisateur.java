@@ -13,9 +13,9 @@ public class Utilisateur {
     @GeneratedValue
     private int id;
     private String nom;
+    private String prenom;
     @Column(unique = true)
     private String identifiant;
-    private String prenom;
     private String adresse;
     @Column(unique = true)
     private String email;
@@ -31,5 +31,21 @@ public class Utilisateur {
 
     @OneToMany(mappedBy = "emetteur")
     private List<Message> envoyes;//liste des message envoyes
+
+    public String getUserType(){
+
+        String type = "";
+        if(this instanceof Etudiant)
+            type = "Etudiant";
+        else if (this instanceof Enseignant)
+            type = "Enseignant";
+        return type;
+    }
+
+    public String getPhotoPath(){
+        if(this.photo != null && !"".equals(this.photo))
+            return  this.photo;
+        return  "/assets/global/img/people.png";
+    }
 
 }

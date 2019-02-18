@@ -9,9 +9,9 @@ import java.util.List;
 public class Enseignant extends Utilisateur{
     @Id @GeneratedValue
     private int id;
-
-    @Column(unique = true)
-    private String matricule;
+//
+//    @Column(unique = true)
+//    private String matricule;
 
     @OneToMany(mappedBy = "enseignant")
     private List<Seance> seanceList;// list de seance

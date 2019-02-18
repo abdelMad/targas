@@ -12,7 +12,7 @@ public class AnneeScolaire {
     @Id
     @GeneratedValue
     private int id;
-    @Pattern(regexp = "^[0-9]{4}/[0-9]{4}$]")
+    @Pattern(regexp = "^[0-9]{4}/[0-9]{4}$")
     private String nomAnneeScolaire;
 
     @OneToMany(mappedBy = "anneeScolaire")

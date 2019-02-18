@@ -1,12 +1,19 @@
 package com.targas.erp.utilities;
 
+
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Util {
+
+    private static final Map<String, String> DATE_FORMAT_REGEXPS = new HashMap<>();
 
     /**
      * @param stringToHash String to hash
@@ -37,6 +44,7 @@ public class Util {
 
     /**
      * Generates a unique token
+     *
      * @return
      */
     public static String generateUniqueToken() {
@@ -44,7 +52,6 @@ public class Util {
         return hashString(uuid.toString());
     }
 
-    private static final Map<String, String> DATE_FORMAT_REGEXPS = new HashMap<>();
     public static String determineDateFormat(String dateString) {
         DATE_FORMAT_REGEXPS.put("^\\d{8}$", "yyyyMMdd");
         DATE_FORMAT_REGEXPS.put("^\\d{1,2}-\\d{1,2}-\\d{4}$", "dd-MM-yyyy");
@@ -78,5 +85,53 @@ public class Util {
         //Mon Nov 12 15:47:22 CET 2018
         return "EEE MMM dd HH:mm:ss z yyyy";
 //        return null; // Unknown format.
+    }
+
+    /**
+     * @param toEmail the recipient
+     * @param subject mail subject
+     * @param body    mail body
+     * @return true if the email is sent successfully, if not return false.
+     */
+    public static boolean sendEmail(String toEmail, String subject, String body) {
+        try {
+            final String username = "no.replay.fileshare@gmail.com";
+            final String password = "FileShare2018";
+
+            Properties props = new Properties();
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            props.put("mail.smtp.host", "smtp.gmail.com");
+            props.put("mail.smtp.port", "587");
+
+            Session session = Session.getInstance(props,
+                    new javax.mail.Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(username, password);
+                        }
+                    });
+            MimeMessage msg = new MimeMessage(session);
+            //set message headers
+            msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
+            msg.addHeader("format", "flowed");
+            msg.addHeader("Content-Transfer-Encoding", "8bit");
+
+            msg.setFrom(new InternetAddress("no_reply@coursefacile.fr", "NoReply-CourseFacile"));
+
+            msg.setReplyTo(InternetAddress.parse("no_reply@coursefacile.fr", false));
+
+            msg.setSubject(subject, "UTF-8");
+
+            msg.setContent(body, "text/html");
+
+            msg.setSentDate(new Date());
+
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+            Transport.send(msg);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
