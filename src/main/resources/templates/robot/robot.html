@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8"/>
-    <title>Targas | Ajouter utilisateur</title>
+    <title>Targas | Robot</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <meta content="Preview page of Metronic Admin Theme #2 for statistics, charts, recent events and reports"
@@ -51,7 +51,7 @@
             <!-- BEGIN PAGE HEADER-->
             <!-- BEGIN THEME PANEL -->
             <!-- END THEME PANEL -->
-            <h1 class="page-title"> Utilisateurs
+            <h1 class="page-title"> Robot
                 <small></small>
             </h1>
             <div class="page-bar">
@@ -62,69 +62,20 @@
                         <i class="fa fa-angle-right"></i>
                     </li>
                     <li>
-                        <span>Utilisateurs</span>
+                        <span>Robot</span>
                     </li>
                 </ul>
             </div>
             <!-- END PAGE HEADER-->
             <!-- BEGIN : USER CARDS -->
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="portlet light portlet-fit ">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class=" icon-layers font-green"></i>
-                                <span class="caption-subject font-green bold uppercase">Utilisateurs</span>
-                            </div>
-                        </div>
-                        <div class="portlet-body">
-                            <div class="mt-element-card mt-card-round mt-element-overlay">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <a href="/utilisateurs/ajouter" class="btn btn-primary margin-bottom-20">Ajouter un utilisateur</a>
+            <form method="post" action="">
+                Lancer le remplissage de la base de données :
+                <input type="Submit" value="OK" /><br>
 
-                                        <a href="/utilisateurs/importer" class="btn btn-primary margin-bottom-20">Importer des utilisateurs</a>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" th:each="u:${uList}">
-                                        <div class="mt-card-item">
-                                            <div class="mt-card-avatar mt-overlay-1">
-                                                <img th:src="${u.getPhotoPath()}"/>
-                                                <div class="mt-overlay">
-                                                    <ul class="mt-info">
-                                                        <li>
-                                                            <a class="btn default btn-outline" title="plus de details" th:href="${'/utilisateur/'+u.id}">
-                                                                <i class="icon-magnifier"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="btn default btn-outline" title="modifier" th:href="${'/utilisateur/edit/'+u.id}">
-                                                                <i class="icon-pencil"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="mt-card-content">
-                                                <h3 class="mt-card-name"
-                                                    th:text="${u.prenom+' '+u.nom.toUpperCase()}"></h3>
-                                                <p class="mt-card-desc font-grey-mint" th:text="${u.getUserType()}"></p>
-                                                <div class="mt-card-social">
-                                                    <a th:href="${'/utilisateur/'+u.id}" class="btn green">plus de
-                                                        details</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </form>
+
             <!-- END : USER CARDS -->
-        </div>
+
 
         <!-- END CONTENT BODY -->
     </div>
