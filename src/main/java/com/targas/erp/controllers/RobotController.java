@@ -67,7 +67,7 @@
             prenom.add("Jean");
             String url = "jdbc:mysql://localhost/targas?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
             String identifiant = "root";
-            String mdp = "4ag2ncarnot";
+            String mdp = "";
             PreparedStatement pst;
             Etudiant etudiant = new Etudiant();
 

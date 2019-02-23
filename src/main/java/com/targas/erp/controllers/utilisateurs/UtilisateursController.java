@@ -198,7 +198,7 @@ public class UtilisateursController {
             Connection c;
             String url = "jdbc:mysql://localhost/targas?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
             String identifiant = "root";
-            String mdp = "4ag2ncarnot";
+            String mdp = "";
             PreparedStatement pst;
 
             String mdpBDD;
@@ -256,7 +256,6 @@ public class UtilisateursController {
                             break;
                             case "Enseignant":
 
-                                System.out.println("prof detected");
                                 pst = c.prepareStatement("insert into utilisateur (adresse, description, email, identifiant, mdp, nom, photo, prenom, groupe_etudiant, dtype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Enseignant',?)");
 
                                 Enseignant prof = new Enseignant();
