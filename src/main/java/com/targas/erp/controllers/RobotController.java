@@ -1,4 +1,4 @@
-    package com.targas.erp.controllers.utilisateurs;
+    package com.targas.erp.controllers;
 
     import com.targas.erp.dao.IEnseignantRepo;
     import com.targas.erp.dao.IEtudiantRepo;

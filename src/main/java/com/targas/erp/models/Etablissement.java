@@ -25,4 +25,6 @@ public class Etablissement {
             joinColumns = @JoinColumn(name = "etablissementList"),
             inverseJoinColumns = @JoinColumn(name = "filieres"))
     private List<Filiere> filieres;
+
+    private boolean deleted = false;
 }

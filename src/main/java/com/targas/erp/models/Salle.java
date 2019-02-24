@@ -25,4 +25,6 @@ public class Salle {
     @ManyToOne
     @JoinColumn(name = "examen")
     private Examen examen;
+
+    private boolean deleted = false;
 }
