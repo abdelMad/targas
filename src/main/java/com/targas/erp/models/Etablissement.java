@@ -11,11 +11,8 @@ public class Etablissement {
     @Id
     @GeneratedValue
     private int id;
-
     private String nom;
-
     private String adresse;
-
 
     @OneToMany(mappedBy = "etablissement")
     private List<Salle> salleList;

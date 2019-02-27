@@ -24,6 +24,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Controller
 public class UtilisateursController {
@@ -193,26 +194,6 @@ public class UtilisateursController {
             }
 
             ArrayList<String> infos = new ArrayList<>();
-
-            Statement st;
-            Connection c;
-            String url = "jdbc:mysql://localhost/targas?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-            String identifiant = "root";
-            String mdp = "";
-            PreparedStatement pst;
-
-            String mdpBDD;
-
-            c = DriverManager.getConnection(url, identifiant, mdp);
-            st = c.createStatement();
-            ResultSet rs2 = st.executeQuery("SELECT COUNT(*) FROM utilisateur");
-            int temp = 0;
-            if(rs2.next()) {
-                temp = rs2.getInt("COUNT(*)");
-                //System.out.println("count :" + temp);
-
-            }
-
             String prenom,nom,mail,adress,id;
             for(int r = 0; r < rows; r++) {
                 row = sheet.getRow(r);
@@ -227,59 +208,38 @@ public class UtilisateursController {
                         }
                     }
 
+                    Random rand = new Random();
+                    int randomNum;
+                    String mdp;
 
                     switch (infos.get(0)){
                         case "Etudiant":
-                            pst = c.prepareStatement("insert into utilisateur (adresse, description, email, identifiant, mdp, nom, photo, prenom, groupe_etudiant, dtype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Etudiant',?)");
                             Etudiant etudiant = new Etudiant();
-                            nom=infos.get(1);
-                            prenom=infos.get(2);
-                            mail=infos.get(3);
-                            adress=infos.get(4);
+                            mdp = Util.generateUniqueToken();
+                            etudiant.setMdp(Util.hashString(mdp));
+                            etudiant.setEmail(infos.get(3));
+                            etudiant.setAdresse(infos.get(4));
                             etudiant.setNom(infos.get(1));
                             etudiant.setPrenom(infos.get(2));
-                            mdpBDD = Util.hashString(Util.generateUniqueToken());
-                            id=etudiant.generateIdentifiant();
-                            pst.setString(1, adress);
-                            pst.setString(2, null);
-                            pst.setString(3, mail);
-                            pst.setString(4, id);
-                            pst.setString(5, mdpBDD);
-                            pst.setString(6, nom);
-                            pst.setString(7, null);
-                            pst.setString(8, prenom);
-                            pst.setString(9, null);
-                            pst.setString(10, Integer.toString(r + temp + 1));
-
-                            pst.executeUpdate();
+                            etudiant.setIdentifiant(etudiant.generateIdentifiant());
+                            String m = etudiant.generateIdentifiant();
+                            System.out.println("Import étudiant mdp : "+mdp+" id : "+m);
+                            iEtudiantRepo.save(etudiant);
                             infos.clear();
                             break;
                             case "Enseignant":
-
-                                pst = c.prepareStatement("insert into utilisateur (adresse, description, email, identifiant, mdp, nom, photo, prenom, groupe_etudiant, dtype, id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Enseignant',?)");
-
                                 Enseignant prof = new Enseignant();
-                                nom=infos.get(1);
-                                prenom=infos.get(2);
-                                mail=infos.get(3);
-                                adress=infos.get(4);
+                                mdp = Util.generateUniqueToken();
+                                prof.setMdp(Util.hashString(mdp));
+                                prof.setEmail(infos.get(3));
+                                prof.setAdresse(infos.get(4));
                                 prof.setNom(infos.get(1));
                                 prof.setPrenom(infos.get(2));
-                                mdpBDD = Util.hashString(Util.generateUniqueToken());
-                                id=prof.generateIdentifiant();
-                                pst.setString(1, adress);
-                                pst.setString(2, null);
-                                pst.setString(3, mail);
-                                pst.setString(4, id);
-                                pst.setString(5, mdpBDD);
-                                pst.setString(6, nom);
-                                pst.setString(7, null);
-                                pst.setString(8, prenom);
-                                pst.setString(9, null);
-                                pst.setString(10, Integer.toString(r + temp + 1));
 
-                                pst.executeUpdate();
-
+                                m=prof.generateIdentifiant();
+                                prof.setIdentifiant(m);
+                                System.out.println("Import enseignant mdp : "+mdp+" id "+m);
+                                iEnseignantRepo.save(prof);
                                 infos.clear();
                                 break;
                                 default:
