@@ -1,4 +1,4 @@
-package com.targas.erp.controllers.utilisateurs;
+package com.targas.erp.controllers;
 
 import com.targas.erp.dao.IEnseignantRepo;
 import com.targas.erp.dao.IEtudiantRepo;
@@ -63,7 +63,7 @@ public class UtilisateursController {
                 case "etudiant":
                     Etudiant etudiant = new Etudiant();
                    // etudiant.setIdentifiant(u.getIdentifiant());
-                    etudiant.setIdentifiant(u.generateIdentifiant());
+                    u.setIdentifiant(etudiant.generateIdentifiant());
                     etudiant.setEmail(u.getEmail());
                     etudiant.setMdp(u.getMdp());
                     etudiant.setAdresse(u.getAdresse());
@@ -74,7 +74,7 @@ public class UtilisateursController {
                     break;
                 case "enseignant":
                     Enseignant enseignant = new Enseignant();
-                    enseignant.setIdentifiant(u.getIdentifiant());
+                    u.setIdentifiant(enseignant.getIdentifiant());
                     enseignant.setEmail(u.getEmail());
                     enseignant.setMdp(u.getMdp());
                     enseignant.setAdresse(u.getAdresse());
@@ -85,7 +85,7 @@ public class UtilisateursController {
                 default:
                     break;
             }
-            Util.sendEmail(u.getEmail(), "mot de passe", mdp);
+            Util.sendEmail(u.getEmail(), "identifiant et mot de passe", "Identifiant: "+u.getIdentifiant()+"mot de passe: "+mdp);
             System.out.println(mdp);
         }
         return "utilisateur/ajouterUtilisateur";
@@ -115,7 +115,7 @@ public class UtilisateursController {
                 case "etudiant":
                     Etudiant etudiant = new Etudiant();
                     etudiant.setId(id);
-                    etudiant.setIdentifiant(u.getIdentifiant());
+                    etudiant.setIdentifiant(optionalUtilisateur.get().getIdentifiant());
                     etudiant.setEmail(u.getEmail());
                     etudiant.setMdp(u.getMdp());
                     etudiant.setAdresse(u.getAdresse());
@@ -127,7 +127,7 @@ public class UtilisateursController {
                 case "enseignant":
                     Enseignant enseignant = new Enseignant();
                     enseignant.setId(id);
-                    enseignant.setIdentifiant(u.getIdentifiant());
+                    enseignant.setIdentifiant(optionalUtilisateur.get().getIdentifiant());
                     enseignant.setEmail(u.getEmail());
                     enseignant.setMdp(u.getMdp());
                     enseignant.setAdresse(u.getAdresse());

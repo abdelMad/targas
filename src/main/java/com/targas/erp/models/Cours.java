@@ -15,6 +15,8 @@ public class Cours {
 
     private float masseHoraire;
 
+    private boolean deleted = false;
+
     @OneToMany(mappedBy = "cours")
     private List<Seance> seanceList;
 
@@ -25,11 +27,8 @@ public class Cours {
     @OneToMany(mappedBy = "cours")
     private List<Examen> examenList;
 
-    @ManyToMany
-    @JoinTable(name = "cours_eleves",
-            joinColumns = @JoinColumn(name = "cours"),
-            inverseJoinColumns = @JoinColumn(name = "eleves"))
-    private List<GroupeEtudiant> eleves;//quels eleves ont les droits dessus ?
+    @ManyToMany(mappedBy = "cours")
+    private List<Groupe> eleves;//quels eleves ont les droits dessus ?
 
     @ManyToMany
     @JoinTable(name = "cours_enseignant",

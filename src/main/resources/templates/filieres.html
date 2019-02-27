@@ -67,34 +67,6 @@
                         <span>Form Stuff</span>
                     </li>
                 </ul>
-                <div class="page-toolbar">
-                    <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle"
-                                data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
-                            Actions
-                            <i class="fa fa-angle-down"></i>
-                        </button>
-                        <ul class="dropdown-menu pull-right" role="menu">
-                            <li>
-                                <a href="#">
-                                    <i class="icon-bell"></i> Action</a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="icon-shield"></i> Another action</a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="icon-user"></i> Something else here</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#">
-                                    <i class="icon-bag"></i> Separated link</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
             </div>
             <!-- END PAGE HEADER-->
             <div class="row">
@@ -104,11 +76,11 @@
                         <div class="portlet-title">
                             <div class="caption font-green">
                                 <i class="icon-settings font-green"></i>
-                                <span class="caption-subject bold uppercase">Etablissements</span>
+                                <span class="caption-subject bold uppercase">Filieres</span>
                             </div>
                             <div class="pull-right">
-                                <a class="btn btn-outline dark" data-toggle="modal" id="new-etab" href="#etab-form"> Ajouter un
-                                    etablissement </a>
+                                <a class="btn btn-outline dark" data-toggle="modal" id="new-filiere" href="#filiere-form"> Ajouter une
+                                    filiere </a>
 
                             </div>
                         </div>
@@ -118,19 +90,23 @@
                                 <thead>
                                 <tr>
                                     <th class="all">#</th>
-                                    <th >Nom</th>
-                                    <th class="min-phone-l">Adresse</th>
+                                    <th >Nom Filiere</th>
+                                    <th>Etablissements</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="e,iter : ${etablissements}" th:data-id="${e.id}"th:data-nom="${e.nom}"th:data-adresse="${e.adresse}">
+                                <tr th:each="f,iter : ${filieres}"
+                                    th:data-id="${f.id}"th:data-nom="${f.nomFiliere}"
+                                >
                                     <td th:text="${iter.index+1}"></td>
-                                    <td th:text="${e.nom}"></td>
-                                    <td th:text="${e.adresse}"></td>
+                                    <td th:text="${f.nomFiliere}"></td>
                                     <td>
-                                        <button class="btn btn-warning modifier-etab" data-toggle="modal"  href="#etab-form">Modifier</button>
-                                        <button class="btn btn-danger supprimer-etab">Supprimer</button>
+                                        <span class="label label-sm label-info etabs-list margin-right-10" th:each="e :${f.etablissementList}" th:text="${e.nom}" th:data-etab="${e.id}"></span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-warning modifier-filiere" data-toggle="modal"  href="#filiere-form">Modifier</button>
+                                        <button class="btn btn-danger supprimer-filiere">Supprimer</button>
 
                                     </td>
 
@@ -142,7 +118,7 @@
                     <!-- END EXAMPLE TABLE PORTLET-->
                 </div>
             </div>
-            <div id="etab-form" class="modal fade" tabindex="-1" data-width="760">
+            <div id="filiere-form" class="modal fade" tabindex="-1" data-width="760">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                     <h4 class="modal-title">Responsive</h4>
@@ -150,19 +126,27 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <h4>Informations apropos de l'etablissement</h4>
+                            <h4>Informations apropos de la filiere</h4>
                             <p>
-                                <input class="form-control" id="nom-etab" placeholder="Nom" type="text">
-                            </p>
+                                <input class="form-control" id="nom-filiere" placeholder="Nom Filiere" type="text"></p>
                             <p>
-                                <input class="form-control" id="adresse-etab" placeholder="Adresse" type="text">
+                                <label>Etablissements</label>
+                                <div class="md-checkbox-list">
+                                <div class="md-checkbox" th:each="e : ${etablissements}">
+                                    <input type="checkbox" th:value="${e.id}" th:id="${'etab'+e.id}" class="md-check etabs-filiere">
+                                    <label th:for="${'etab'+e.id}">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> [[ ${e.nom} ]] </label>
+                                </div>
+                            </div>
                             </p>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-outline dark">Fermer</button>
-                    <button type="button" class="btn green" id="save-etab">Enregistrer</button>
+                    <button type="button" data-dismiss="modal"  class="btn btn-outline dark">Close</button>
+                    <button type="button" class="btn green" id="save-filiere">Enregistrer</button>
                 </div>
             </div>
 

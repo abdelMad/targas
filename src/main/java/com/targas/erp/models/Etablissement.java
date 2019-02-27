@@ -20,10 +20,8 @@ public class Etablissement {
     @OneToMany(mappedBy = "etablissement")
     private List<Salle> salleList;
 
-    @ManyToMany
-    @JoinTable(name = "etablissement_filiere",
-            joinColumns = @JoinColumn(name = "etablissementList"),
-            inverseJoinColumns = @JoinColumn(name = "filieres"))
+
+    @ManyToMany(mappedBy = "etablissementList")
     private List<Filiere> filieres;
 
     private boolean deleted = false;

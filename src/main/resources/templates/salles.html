@@ -117,8 +117,8 @@
                                    id="sample_2">
                                 <thead>
                                 <tr>
-                                    <th></th>
-                                    <th class="all">Nom</th>
+                                    <th class="all"></th>
+                                    <th >Nom</th>
                                     <th>Capacite</th>
                                     <th >Nombre de pc</th>
                                     <th >Etablissement</th>
@@ -126,13 +126,13 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="s : ${salles}"
+                                <tr th:each="s,iter : ${salles}"
                                     th:data-id="${s.id}"th:data-nom="${s.nom}"
                                     th:data-capacite="${s.capacite}"
                                     th:data-nbrpc="${s.nbrPC}"
                                     th:data-etablissement="${s.etablissement.id}"
                                 >
-                                    <td></td>
+                                    <td th:text="${iter.index+1}"></td>
                                     <td th:text="${s.nom}"></td>
                                     <td th:text="${s.capacite}"></td>
                                     <td th:text="${s.nbrPC}"></td>

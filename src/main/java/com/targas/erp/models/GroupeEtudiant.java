@@ -34,8 +34,7 @@ public class GroupeEtudiant {
     @ManyToMany(mappedBy = "classes")
     private List<Seance> seances;
 
-    @ManyToMany(mappedBy = "eleves")
-    private List<Cours> cours;
+
 
     @ManyToMany(mappedBy = "groupeEtudiantList")
     private List<Examen> examenList;

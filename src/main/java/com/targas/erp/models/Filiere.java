@@ -15,9 +15,14 @@ public class Filiere {
 
     private String nomFiliere;
 
+    private boolean deleted = false;
+
     @OneToMany(mappedBy = "filiere")
     private List<Groupe> groupeList;
 
-    @ManyToMany(mappedBy = "filieres")
+    @ManyToMany
+    @JoinTable(name = "etablissement_filiere",
+            joinColumns = @JoinColumn(name = "filieres"),
+            inverseJoinColumns = @JoinColumn(name = "etablissementList"))
     private List<Etablissement> etablissementList;
 }

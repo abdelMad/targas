@@ -104,11 +104,11 @@
                         <div class="portlet-title">
                             <div class="caption font-green">
                                 <i class="icon-settings font-green"></i>
-                                <span class="caption-subject bold uppercase">Etablissements</span>
+                                <span class="caption-subject bold uppercase">Salles</span>
                             </div>
                             <div class="pull-right">
-                                <a class="btn btn-outline dark" data-toggle="modal" id="new-etab" href="#etab-form"> Ajouter un
-                                    etablissement </a>
+                                <a class="btn btn-outline dark" data-toggle="modal" id="new-salle" href="#salle-form"> Ajouter une
+                                    salle </a>
 
                             </div>
                         </div>
@@ -117,20 +117,29 @@
                                    id="sample_2">
                                 <thead>
                                 <tr>
-                                    <th class="all">#</th>
-                                    <th >Nom</th>
-                                    <th class="min-phone-l">Adresse</th>
+                                    <th></th>
+                                    <th class="all">Nom</th>
+                                    <th>Capacite</th>
+                                    <th >Nombre de pc</th>
+                                    <th >Etablissement</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="e,iter : ${etablissements}" th:data-id="${e.id}"th:data-nom="${e.nom}"th:data-adresse="${e.adresse}">
-                                    <td th:text="${iter.index+1}"></td>
-                                    <td th:text="${e.nom}"></td>
-                                    <td th:text="${e.adresse}"></td>
+                                <tr th:each="s : ${salles}"
+                                    th:data-id="${s.id}"th:data-nom="${s.nom}"
+                                    th:data-capacite="${s.capacite}"
+                                    th:data-nbrpc="${s.nbrPC}"
+                                    th:data-etablissement="${s.etablissement.id}"
+                                >
+                                    <td></td>
+                                    <td th:text="${s.nom}"></td>
+                                    <td th:text="${s.capacite}"></td>
+                                    <td th:text="${s.nbrPC}"></td>
+                                    <td th:text="${s.etablissement.nom}"></td>
                                     <td>
-                                        <button class="btn btn-warning modifier-etab" data-toggle="modal"  href="#etab-form">Modifier</button>
-                                        <button class="btn btn-danger supprimer-etab">Supprimer</button>
+                                        <button class="btn btn-warning modifier-salle" data-toggle="modal"  href="#salle-form">Modifier</button>
+                                        <button class="btn btn-danger supprimer-salle">Supprimer</button>
 
                                     </td>
 
@@ -142,7 +151,7 @@
                     <!-- END EXAMPLE TABLE PORTLET-->
                 </div>
             </div>
-            <div id="etab-form" class="modal fade" tabindex="-1" data-width="760">
+            <div id="salle-form" class="modal fade" tabindex="-1" data-width="760">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                     <h4 class="modal-title">Responsive</h4>
@@ -150,19 +159,25 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <h4>Informations apropos de l'etablissement</h4>
+                            <h4>Informations apropos de la salle</h4>
                             <p>
-                                <input class="form-control" id="nom-etab" placeholder="Nom" type="text">
-                            </p>
+                                <input class="form-control" id="nom-salle" placeholder="Nom" type="text"></p>
                             <p>
-                                <input class="form-control" id="adresse-etab" placeholder="Adresse" type="text">
+                                <input class="form-control" id="capacite-salle" placeholder="Capacite" type="text"></p>
+                            <p>
+                                <input class="form-control" id="nbrpc-salle" placeholder="Nombre de pc" type="text"></p>
+                            <p>
+                                <select class="form-control" id="etab-salle">
+                                    <option value="-1">Selectionnez un etablissement</option>
+                                    <option th:each="e : ${etablissements}" th:value="${e.id}" th:text="${e.nom}"></option>
+                                </select>
                             </p>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-outline dark">Fermer</button>
-                    <button type="button" class="btn green" id="save-etab">Enregistrer</button>
+                    <button type="button" data-dismiss="modal"  class="btn btn-outline dark">Close</button>
+                    <button type="button" class="btn green" id="save-salle">Save changes</button>
                 </div>
             </div>
 
