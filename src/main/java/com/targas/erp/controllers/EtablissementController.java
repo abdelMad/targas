@@ -55,7 +55,7 @@ public class EtablissementController {
 
     @PostMapping("/etablissements/supprimer")
     @ResponseBody
-    public String supprimeretablissement(@RequestBody String jsonString) {
+    public String supprimerEtablissement(@RequestBody String jsonString) {
 
         JSONObject jsonObject = new JSONObject(jsonString);
         Optional<Etablissement> etablissementOptional = etablissementRepo.findById(Integer.parseInt(jsonObject.get("id").toString()));

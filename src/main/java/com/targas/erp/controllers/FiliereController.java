@@ -36,7 +36,7 @@ public class FiliereController {
 
     @PostMapping("/filieres/enregistrer")
     @ResponseBody
-    public String enregistrerEtablissement(@RequestBody String jsonString) {
+    public String enregistrerFiliere(@RequestBody String jsonString) {
 
         JSONObject jsonObject = new JSONObject(jsonString);
         JSONArray etablissementJsonArray = new JSONArray(jsonObject.get("etabs").toString());
@@ -66,7 +66,7 @@ public class FiliereController {
 
     @PostMapping("/filieres/supprimer")
     @ResponseBody
-    public String supprimeretablissement(@RequestBody String jsonString) {
+    public String supprimerFiliere(@RequestBody String jsonString) {
 
         JSONObject jsonObject = new JSONObject(jsonString);
         Optional<Filiere> filiereOptional = filiereRepo.findById(Integer.parseInt(jsonObject.get("id").toString()));

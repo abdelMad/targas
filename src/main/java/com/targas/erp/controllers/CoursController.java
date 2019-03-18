@@ -1,6 +1,7 @@
 package com.targas.erp.controllers;
 
 import com.targas.erp.dao.ICoursRepo;
+import com.targas.erp.dao.IEnseignantRepo;
 import com.targas.erp.models.Cours;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class CoursController {
 
     @Autowired
     private ICoursRepo coursRepo;
+
+    @Autowired
+    private IEnseignantRepo enseignantRepo;
 
     @GetMapping("/cours")
     public String renderCoursPage(Model model){
@@ -64,9 +68,5 @@ public class CoursController {
         return "[\"error\"]";
     }
 
-    @GetMapping("/cours/affectation")
-    public String renderAffectationCoursPage(Model model){
 
-        return "affectationCours";
-    }
 }

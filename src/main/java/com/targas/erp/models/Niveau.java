@@ -16,7 +16,7 @@ public class Niveau {
     @GeneratedValue
     private int id;
     private String nom;
-
+    private boolean deleted = false;
     @OneToMany(mappedBy = "niveau")
     private List<GroupeEtudiant> groupeEtudiants;
 }

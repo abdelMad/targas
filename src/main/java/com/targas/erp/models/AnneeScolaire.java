@@ -17,4 +17,7 @@ public class AnneeScolaire {
 
     @OneToMany(mappedBy = "anneeScolaire")
     private List<GroupeEtudiant> groupeEtudiantList;
+
+    @OneToMany(mappedBy = "anneeScolaire")
+    private List<Affectation> affectations;
 }

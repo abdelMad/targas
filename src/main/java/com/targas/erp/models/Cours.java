@@ -30,11 +30,8 @@ public class Cours {
     @ManyToMany(mappedBy = "cours")
     private List<Groupe> eleves;//quels eleves ont les droits dessus ?
 
-    @ManyToMany
-    @JoinTable(name = "cours_enseignant",
-            joinColumns = @JoinColumn(name = "cours"),
-            inverseJoinColumns = @JoinColumn(name = "enseignants"))
-    private List<Enseignant> enseignants;
+    @OneToMany(mappedBy = "cours")
+    private List<Affectation> affectations;
 
 
 }

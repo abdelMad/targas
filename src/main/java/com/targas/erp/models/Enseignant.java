@@ -1,4 +1,5 @@
 package com.targas.erp.models;
+
 import lombok.Data;
 
 import javax.persistence.*;
@@ -6,8 +7,9 @@ import java.util.List;
 
 @Data
 @Entity
-public class Enseignant extends Utilisateur{
-    @Id @GeneratedValue
+public class Enseignant extends Utilisateur {
+    @Id
+    @GeneratedValue
     private int id;
 //
 //    @Column(unique = true)
@@ -22,7 +24,14 @@ public class Enseignant extends Utilisateur{
             inverseJoinColumns = @JoinColumn(name = "examenList"))
     private List<Examen> examenList;
 
-    @ManyToMany(mappedBy = "enseignants")
-    private List<Cours> cours;//liste de tout ces cours
+    @OneToMany(mappedBy = "enseignant")
+    private List<Affectation> affectations;
 
+//    public String getJsonCours() {
+//        JSONArray jsonArray = new JSONArray();
+//        for (Cours cour : cours) {
+//            jsonArray.put(cour.getId());
+//        }
+//        return jsonArray.toString();
+//    }
 }

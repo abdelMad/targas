@@ -15,25 +15,24 @@ public class GroupeEtudiant {
     private int id;
     private String nom;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "groupe")
     private Groupe groupe;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "niveau")
     private Niveau niveau;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "anneeScolaire")
     private AnneeScolaire anneeScolaire;
 
 
-    @OneToMany(mappedBy = "groupeEtudiant")
+    @OneToMany(mappedBy = "groupeEtudiant", fetch = FetchType.EAGER)
     private List<Etudiant> etudiants;
 
     @ManyToMany(mappedBy = "classes")
     private List<Seance> seances;
-
 
 
     @ManyToMany(mappedBy = "groupeEtudiantList")

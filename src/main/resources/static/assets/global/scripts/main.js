@@ -391,10 +391,254 @@ jQuery(function ($) {
             } else {
                 alert('tout les champs sont obligatoirs');
             }
-        })
+        });
+        $ddlCoursGrpContainerClone = $('#ddl-cours-grp-affect-container').clone();
+        var $ddlCoursGrpContainer = $('#ddl-cours-grp-affect-container');
+        $ddlCoursGrpContainer.children().remove();
+
+        $('.groupe-affect').on('click', function (e) {
+            var $parent = $(this).parent().parent();
+            data = {
+                id: $parent.data('id')
+            };
+            $('#nom-groupe-affectation').val($parent.data('nom'));
+            $('#abbreviation-groupe-affectation').val($parent.data('abbreviation'));
+            util.postJson('/groupes/affectation/cours', JSON.stringify(data), function (data) {
+                console.log(data);
+                $ddlCoursGrpContainer.html($ddlCoursGrpContainerClone.html());
+                $ddlCoursGrpContainer.find('#grp-cours-affect').select2({
+                    dropdownAutoWidth: 'true',
+                    width: '100%',
+                    data: data,
+                    placeholder: 'Selectionner les cours a affecter',
+                    "language": {
+                        "noResults": function () {
+                            return "plus de cours a affecter a ce groupe";
+                        }
+                    }
+                });
+
+            });
+        });
+
+        $('#save-affect-grp').on('click', function (e) {
+            data.cours = $('#grp-cours-affect').val();
+            util.postJson('/groupes/affectation/save', JSON.stringify(data), function (response) {
+                if (response.length && response[0] === 'ok') {
+                    alert('Enregistrement effectue');
+                    location.reload();
+                }
+            })
+        });
+        $('.supprimer-affect-groupe').on('click', function (e) {
+            e.preventDefault();
+            var data = JSON.stringify({
+                    id: $(this).parent().parent().parent().data('id'),
+                    cours: $(this).data('id')
+                })
+            ;
+            if (confirm("Etes vous sur de vouloir supprimer ce cours pour ce groupe")) {
+                util.postJson('/groupes/affectation/supprimer', data, function (response) {
+                    if (response.length && response[0] === 'ok') {
+                        alert('cours supprime avec succes');
+                        location.reload();
+                    }
+                })
+            }
+        });
 
     }
     /**
      * Fin Groupe page
+     */
+    /**
+     * Debut Niveau page
+      */
+    var $saveNiveau = $('#save-niveau');
+    if ($saveNiveau.length) {
+        var data = {};
+        $('#new-niveau').on('click', function () {
+            data = {
+                id: '',
+                nom: '',
+            };
+            $('#nom-niveau').val('');
+        });
+        $('.modifier-niveau').on('click', function () {
+            var $parent = $(this).parent().parent();
+            data = {
+                id: $parent.data('id'),
+                nom: $parent.data('nom'),
+            };
+            console.log('im here');
+            console.log(data);
+            $('#nom-niveau').val(data.nom);
+        });
+        $('.supprimer-niveau').on('click', function () {
+            var $parent = $(this).parent().parent();
+            data = {
+                id: $parent.data('id')
+            };
+            util.postJson('/niveaux/supprimer', JSON.stringify(data), function (response) {
+                if (response.length && response[0] === 'ok') {
+                    alert('supression effectue');
+                    location.reload();
+                }
+            })
+        });
+        $saveNiveau.on('click', function () {
+            data.nom = $('#nom-niveau').val();
+            if (data.nom !== '' ) {
+                util.postJson('/niveaux/enregistrer', JSON.stringify(data), function (response) {
+                    if (response.length && response[0] === 'ok') {
+                        alert('Enregistrement effectue');
+                        location.reload();
+                    }
+                })
+            } else {
+                alert('tout les champs sont obligatoirs');
+            }
+        })
+
+    }
+    /**
+     * Fin Niveau page
+      */
+    /**
+     * Affectation page
+     */
+    var $saveAffect = $('#save-affect');
+    if ($saveAffect.length) {
+        $('#cours-affect').select2('destroy');
+        var $ddlCoursContainerClone = $('#ddl-cours-container').clone();
+        var $ddlCoursContainer = $('#ddl-cours-container');
+        var $ddlEnseignant = $('#enseignant-affect');
+        $ddlCoursContainer.html('<p>Veuillez selectionner un enseignant</p>');
+        $ddlEnseignant.select2({dropdownAutoWidth: 'true', width: '100%', placeholder: 'Selectionner un enseignant'});
+        $ddlEnseignant.on('change', function () {
+            util.postJson('/affectation/cours', JSON.stringify({id: $(this).val()}), function (data) {
+                console.log(data);
+                $ddlCoursContainer.html($ddlCoursContainerClone.html());
+                $ddlCoursContainer.find('#cours-affect').select2({
+                    dropdownAutoWidth: 'true',
+                    width: '100%',
+                    data: data,
+                    placeholder: 'Selectionner les cours a affecter',
+                    "language": {
+                        "noResults": function () {
+                            return "pas de cours a affecter a cet enseignant";
+                        }
+                    }
+                });
+
+            });
+        });
+
+        $('#ajouter-affect').on('click', function (e) {
+            e.preventDefault();
+            $('#anneescolaire').val($('#annee-scolaire-affect option:selected').html());
+
+        });
+
+        $saveAffect.on('click', function (e) {
+            e.preventDefault();
+            var data = JSON.stringify({
+                enseignant: $ddlEnseignant.val(),
+                cours: $('#cours-affect').val(),
+                anneeScolaire: $('#annee-scolaire-affect').val()
+            });
+            console.log(data);
+            util.postJson('/affectation/save', data, function (response) {
+                if (response.length && response[0] === 'ok') {
+                    alert('Enregistrement effectue');
+                    location.reload();
+                }
+            });
+        });
+        $('.supprimer-affect').on('click', function (e) {
+            e.preventDefault();
+            var data = JSON.stringify({
+                id: $(this).data('id')
+            });
+            if (confirm("Etes vous sur de vouloir supprimer l'affectation?")) {
+                util.postJson('/affectation/supprimer', data, function (response) {
+                    if (response.length && response[0] === 'ok') {
+                        alert('Affectation supprime avec succes');
+                        location.reload();
+                    }
+                })
+            }
+        });
+    }
+    /**
+     * Fin Affectation page
+     */
+    /**
+     * Debut Emploi page
+     */
+    var $saveEmploi = $('#save-emploi');
+    if ($saveEmploi.length) {
+        $.fn.datepicker.dates["fr"] = {
+            days: ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"],
+            daysShort: ["dim.", "lun.", "mar.", "mer.", "jeu.", "ven.", "sam."],
+            daysMin: ["d", "l", "ma", "me", "j", "v", "s"],
+            months: ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"],
+            monthsShort: ["janv.", "févr.", "mars", "avril", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.", "déc."],
+            today: "Aujourd'hui",
+            monthsTitle: "Mois",
+            clear: "Effacer",
+            weekStart: 1,
+            format: "dd/mm/yyyy"
+        };
+        var date = new Date();
+        date.setDate(date.getDate());
+        $('.date-picker').datepicker('destroy');
+        $('.date-picker').datepicker({
+            startDate: date,
+            language: "fr",
+            todayHighlight: true,
+            autoclose: true
+        });
+        $saveEmploi.on('click', function (e) {
+            e.preventDefault();
+            var data = JSON.stringify({
+                nom: $('#nom-emploi').val(),
+                dateDebut: $('#dd-emploi').val(),
+                dateFin: $('#df-emploi').val()
+            });
+            console.log(data);
+            util.postJson('/emploi/add', data, function (response) {
+                if (response.length && response[0] === 'ok') {
+                    alert('Enregistrement effectue');
+                    location.reload();
+                } else if (response.length && response[0] === 'exists') {
+                    alert('Un emploi avec ces dates existes deja veuillez le modifier');
+                }
+            });
+        });
+    }
+
+    //emploi
+    var $calendar = $('#calendar');
+    if ($calendar.length) {
+        $calendar.fullCalendar('destroy');
+        var momentDd = moment($calendar.data('dd'));
+        var momentDf = moment($calendar.data('df'));
+        console.log(momentDd.format("YYYY-MM-DD"))
+        console.log(momentDf.format("YYYY-MM-DD"))
+        $calendar.fullCalendar({
+            defaultView: 'agendaWeek',
+            selectable: true,
+            dayClick: function (date, jsEvent, view) {
+                console.log(date.format());
+
+            },
+            select: function (start, end, jsEvent, view) {
+                console.log("from " + start.format() + " to " + end.format());
+            }
+        });
+    }
+    /**
+     * Fin Emploi page
      */
 });

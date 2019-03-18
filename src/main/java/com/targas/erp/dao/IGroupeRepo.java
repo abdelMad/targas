@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface IGroupeRepo extends CrudRepository<Groupe,Integer> {
 
-    @Query("SELECT g FROM Groupe g JOIN Filiere f ON g.filiere=f LEFT JOIN g.cours WHERE  g.deleted=false")
+    @Query("SELECT DISTINCT g FROM Groupe g JOIN Filiere f ON g.filiere=f LEFT JOIN g.cours WHERE  g.deleted=false")
     List<Groupe> listAll();
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/salles")
 public class SalleController {
 
     @Autowired
@@ -22,7 +21,7 @@ public class SalleController {
     @Autowired
     private IEtablissementRepo etablissementRepo;
 
-    @GetMapping("")
+    @GetMapping("/salles")
     public String sallesPageRender(Model model) {
         model.addAttribute("salles", salleRepo.listAll());
         model.addAttribute("etablissements", etablissementRepo.listAll());
@@ -31,7 +30,7 @@ public class SalleController {
     }
 
 
-    @PostMapping("/enregistrer")
+    @PostMapping("/salles/enregistrer")
     @ResponseBody
     public String modifierSalle(@RequestBody String jsonString) {
 
@@ -63,7 +62,7 @@ public class SalleController {
         return "[\"error\"]";
     }
 
-    @PostMapping("/supprimer")
+    @PostMapping("/salles/supprimer")
     @ResponseBody
     public String supprimerSalle(@RequestBody String jsonString) {
 

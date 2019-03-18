@@ -124,24 +124,31 @@
                                 <thead>
                                 <tr>
                                     <th class="all">#</th>
-                                    <th>Enseignant</th>
+                                    <th>Nom groupe</th>
+                                    <th>groupe</th>
+                                    <th>Annee scolaire</th>
+                                    <th>Niveau</th>
+                                    <th>Filiere</th>
                                     <th>Cours</th>
+                                    <th>Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="e,iter : ${affectations}"
-                                    th:data-id="${e.id}"
-                                    th:data-nom="${e.getFullName()}"
+                                <tr th:each="gre,iter : ${grpEtudiants}"
+                                    th:data-id="${gre.id}"
+                                    th:data-nom="${gre.nom}"
                                 >
                                     <td th:text="${iter.index + 1}"></td>
-                                    <td th:text="${e.getFullName()}"></td>
+                                    <td th:text="${gre.nom}"></td>
+                                    <td th:text="${gre.groupe.nomGroupe}"></td>
+                                    <td th:text="${gre.anneeScolaire.nomAnneeScolaire}"></td>
+                                    <td th:text="${gre.niveau.nom}"></td>
+                                    <td th:text="${gre.groupe.filiere.nomFiliere}"></td>
                                     <td>
-                                        <span class="label label-sm label-info margin-right-10"
-                                              th:each="af : ${e.affectations}">[[ ${af.cours.nom} ]]
 
-                                            <button
-                                            class="btn-danger supprimer-affect" th:data-id="${af.id}">X</button>
-                                        </span>
+                                    </td>
+                                    <td>
+
                                     </td>
 
                                 </tr>
@@ -167,19 +174,33 @@
                                 <input value="" class="form-control" id="anneescolaire" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="enseignant-affect" class="control-label">Selectionnez l'enseignant</label>
+                                <label for="nom-grp-eleve">Nom groupe eleve</label>
+                                <input value="" class="form-control" id="nom-grp-eleve">
+                            </div>
+                            <div class="form-group">
+                                <label for="grp-affect" class="control-label">Selectionnez l'enseignant</label>
                                 <div class="input-group select2-bootstrap-append">
-                                    <select id="enseignant-affect" class="form-control select2">
+                                    <select id="grp-affect" class="form-control select2">
                                         <option></option>
-                                        <option th:each="e : ${enseignants}" th:value="${e.id}"
-                                                th:text="${e.getFullName()}"></option>
+                                        <option th:each="g : ${groups}" th:value="${g.id}"
+                                                th:text="${g.nomGroupe}"></option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group" id="ddl-cours-container">
-                                <label for="cours-affect" class="control-label">Selectionnez les cours</label>
+                            <div class="form-group">
+                                <label for="niveau-affect" class="control-label">Selectionnez l'enseignant</label>
                                 <div class="input-group select2-bootstrap-append">
-                                    <select id="cours-affect" class="form-control select2" multiple>
+                                    <select id="niveau-affect" class="form-control select2">
+                                        <option></option>
+                                        <option th:each="n : ${niveaux}" th:value="${n.id}"
+                                                th:text="${n.nom}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" id="ddl-etudiants-container">
+                                <label for="etudiants-affect" class="control-label">Selectionnez les etudiants</label>
+                                <div class="input-group select2-bootstrap-append">
+                                    <select id="etudiants-affect" class="form-control select2" multiple>
                                         <option></option>
                                     </select>
                                 </div>
