@@ -27,6 +27,8 @@
     <link href="/assets/layouts/layout2/css/layout.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/layouts/layout2/css/themes/blue.min.css" rel="stylesheet" type="text/css" id="style_color"/>
     <link href="/assets/layouts/layout2/css/custom.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/css/main.css" rel="stylesheet" type="text/css"/>
+
     <!-- END THEME LAYOUT STYLES -->
     <link rel="shortcut icon" href="favicon.ico"/>
 </head>
@@ -107,6 +109,7 @@
                                    data-original-title="" title=""> </a>
                             </div>
                         </div>
+                                                <h1 th:text="${uType}"></h1>
                         <div class="portlet-body form">
                             <form role="form" th:object="${u}" action="" method="post" class="form-horizontal">
                                 <div class="form-body">

@@ -1,10 +1,7 @@
 package com.targas.erp.controllers;
 
 import com.targas.erp.dao.*;
-import com.targas.erp.models.Affectation;
-import com.targas.erp.models.AnneeScolaire;
-import com.targas.erp.models.Cours;
-import com.targas.erp.models.Enseignant;
+import com.targas.erp.models.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +39,9 @@ public class AffectationController {
 
     @Autowired
     private INiveauRepo niveauRepo;
+
+    @Autowired
+    private IEtudiantRepo etudiantRepo;
 
     @GetMapping("/affectation/enseignants")
     public String renderAffectationCoursEnseignantPage(Model model) {
@@ -135,8 +135,90 @@ public class AffectationController {
         model.addAttribute("groups", groupeRepo.findAll());
         model.addAttribute("niveaux", niveauRepo.findAll());
         model.addAttribute("as", anneeScolaireRepo.findAll());
+        model.addAttribute("etu", etudiantRepo.findAllWithoutGrp());
 
         return "affectation-eleves";
     }
 
+    @PostMapping("/affectation/eleves/save")
+    @ResponseBody
+    public String saveAffectationGroupeEtudiant(@RequestBody String jsonString) {
+//        as: $('#anneescolaire').val(),
+//                nom: $('#nom-grp-affect-etu').val(),
+//                grp: $('#grp-affect-etu').val(),
+//                niveau: $('#niveau-affect').val(),
+//                etudiants:
+        System.out.println(jsonString);
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            Integer countGrp = groupeEtudiantRepo.grpExists(Integer.parseInt(jsonObject.get("grp").toString()), jsonObject.get("as").toString(), Integer.parseInt(jsonObject.get("niveau").toString()));
+            System.out.println(countGrp);
+            if (countGrp.equals(0)) {
+                GroupeEtudiant groupeEtudiant = new GroupeEtudiant();
+                groupeEtudiant.setNom(jsonObject.get("nom").toString());
+                AnneeScolaire anneeScolaire = anneeScolaireRepo.findByNomAnneeScolaire(jsonObject.get("as").toString());
+                groupeEtudiant.setAnneeScolaire(anneeScolaire);
+                Groupe groupe = groupeRepo.findById(Integer.parseInt(jsonObject.get("grp").toString())).get();
+                groupeEtudiant.setGroupe(groupe);
+                Niveau niveau = niveauRepo.findById(Integer.parseInt(jsonObject.get("niveau").toString())).get();
+                groupeEtudiant.setNiveau(niveau);
+                groupeEtudiantRepo.save(groupeEtudiant);
+                JSONArray etuJson = jsonObject.getJSONArray("etudiants");
+                for (int i = 0; i < etuJson.length(); i++) {
+                    Etudiant etudiant = etudiantRepo.findById(Integer.parseInt(etuJson.get(i).toString())).get();
+                    etudiant.setGroupeEtudiant(groupeEtudiant);
+                    etudiantRepo.save(etudiant);
+                }
+                return "[\"ok\"]";
+            } else
+                return "[\"-1\"]";
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "[\"error\"]";
+    }
+
+    @PostMapping("/affectation/eleves/supprimer")
+    @ResponseBody
+    public String deleteAffectationGrpEleve(@RequestBody String jsonString) {
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            Optional<Etudiant> etudiantOptional = etudiantRepo.findById(Integer.parseInt(jsonObject.get("id").toString()));
+            if (etudiantOptional.isPresent()) {
+                Etudiant etudiant = etudiantOptional.get();
+                etudiant.setGroupeEtudiant(null);
+                etudiantRepo.save(etudiant);
+                return "[\"ok\"]";
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "[\"error\"]";
+    }
+
+    @PostMapping("/affectation/eleves/affect")
+    @ResponseBody
+    public String addEleveAffectation(@RequestBody String jsonString) {
+        try {
+
+            JSONObject jsonObject = new JSONObject(jsonString);
+            Optional<GroupeEtudiant> optionalGroupeEtudiant = groupeEtudiantRepo.findById(Integer.parseInt(jsonObject.get("id").toString()));
+            if (optionalGroupeEtudiant.isPresent()) {
+                GroupeEtudiant groupeEtudiant = optionalGroupeEtudiant.get();
+                JSONArray etuJson = jsonObject.getJSONArray("etudiants");
+                for (int i = 0; i < etuJson.length(); i++) {
+                    Etudiant etudiant = etudiantRepo.findById(Integer.parseInt(etuJson.get(i).toString())).get();
+                    etudiant.setGroupeEtudiant(groupeEtudiant);
+                    etudiantRepo.save(etudiant);
+                }
+                return "[\"ok\"]";
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "[\"error\"]";
+
+    }
 }

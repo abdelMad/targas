@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface IEtudiantRepo extends CrudRepository<Etudiant,Integer> {
 
+    @Query("FROM Etudiant WHERE groupeEtudiant is null ")
+    List<Etudiant> findAllWithoutGrp();
 }

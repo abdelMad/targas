@@ -21,7 +21,7 @@ public class Cours {
     private List<Seance> seanceList;
 
 
-    @OneToMany(mappedBy = "cours")
+    @OneToMany(mappedBy = "cours", fetch = FetchType.EAGER)
     private List<ContenuCours> contenuCours;
 
     @OneToMany(mappedBy = "cours")

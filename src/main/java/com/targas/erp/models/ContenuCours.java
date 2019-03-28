@@ -12,9 +12,9 @@ public class ContenuCours {
 
     private String nomContenu;
 
-    private String type;
+    private String description;
 
-    private String contenu;
+    private String url;
 
     @ManyToOne
     @JoinColumn(name = "cours")

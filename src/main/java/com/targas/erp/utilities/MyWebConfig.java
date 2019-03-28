@@ -17,7 +17,7 @@ public class MyWebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        registry.addInterceptor(loginInterceptor()).addPathPatterns(new String[]{ "/","/profil","/affectation","/cours","/etablissements","/filieres","/groupes","/salles","/utilisateurs","/emploi","/emploi/**","/niveaux","/affectation/**"});
+        registry.addInterceptor(loginInterceptor()).addPathPatterns(new String[]{ "/","/profil","/affectation","/etablissements","/filieres","/groupes","/salles","/utilisateurs","/emploi","/emploi/**","/niveaux","/affectation/**","/cours/**"});
     }
 
     @Override
@@ -29,8 +29,11 @@ public class MyWebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(
-                "/assets/**")
+                "/assets/**",
+                "/images/**"
+                )
                 .addResourceLocations(
-                        "classpath:/static/assets/");
+                        "classpath:/static/assets/",
+                        "classpath:/static/images/");
     }
 }

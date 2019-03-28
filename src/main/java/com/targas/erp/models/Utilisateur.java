@@ -21,8 +21,13 @@ public class Utilisateur {
     @Column(unique = true)
     private String email;
     private String mdp;
+    @Transient
+    private String confirmMdp;
+    @Transient
+    private String oldMdp;
     private String photo;
     private String description;
+    private String numTel;
 
     @ManyToMany
     @JoinTable(name = "recepteur_message",
@@ -86,5 +91,17 @@ public class Utilisateur {
 
     public String getFullName() {
         return prenom + " " + nom;
+    }
+
+    public boolean isEtudiant() {
+        return this instanceof Etudiant;
+    }
+
+    public boolean isEnseignant() {
+        return this instanceof Enseignant;
+    }
+
+    public boolean isAdmin() {
+        return this instanceof MbrScolarite;
     }
 }

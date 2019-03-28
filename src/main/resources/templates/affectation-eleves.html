@@ -32,6 +32,9 @@
     <link href="/assets/layouts/layout2/css/layout.min.css" rel="stylesheet" type="text/css"/>
     <link href="/assets/layouts/layout2/css/themes/blue.min.css" rel="stylesheet" type="text/css" id="style_color"/>
     <link href="/assets/layouts/layout2/css/custom.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/layouts/layout2/css/custom.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/css/main.css" rel="stylesheet" type="text/css"/>
+
     <!-- END THEME LAYOUT STYLES -->
     <link rel="shortcut icon" href="favicon.ico"/>
 </head>
@@ -106,7 +109,7 @@
                             <div class="caption font-green">
                                 <i class="icon-settings font-green"></i>
                                 <span class="caption-subject bold uppercase margin-right-10 ">affectations</span>
-                                <button class="btn btn-success " id="ajouter-affect" data-toggle="modal"
+                                <button class="btn btn-success " id="ajouter-affect-etu" data-toggle="modal"
                                         href="#affect-form">Ajouter
                                 </button>
                             </div>
@@ -129,13 +132,13 @@
                                     <th>Annee scolaire</th>
                                     <th>Niveau</th>
                                     <th>Filiere</th>
-                                    <th>Cours</th>
-                                    <th>Actions</th>
+                                    <th>Eleves</th>
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="gre,iter : ${grpEtudiants}"
-                                    th:data-id="${gre.id}"
+                                    th:data-id="${gre.getId()}"
                                     th:data-nom="${gre.nom}"
                                 >
                                     <td th:text="${iter.index + 1}"></td>
@@ -145,12 +148,19 @@
                                     <td th:text="${gre.niveau.nom}"></td>
                                     <td th:text="${gre.groupe.filiere.nomFiliere}"></td>
                                     <td>
+                                        <span class="label label-sm label-info margin-right-10"
+                                              th:each="e : ${gre.etudiants}">[[ ${e.getFullName()} ]]
 
+                                            <button
+                                                    class="btn-danger supprimer-affect-etu"
+                                                    th:data-id="${e.id}">X</button>
+                                        </span>
                                     </td>
                                     <td>
-
+                                        <button class="btn btn-danger">Supprimer</button>
+                                        <button class="btn btn-success" id="affect-etu" data-toggle="modal"
+                                                href="#add-affect-etu">+ etudiant</button>
                                     </td>
-
                                 </tr>
                                 </tbody>
                             </table>
@@ -174,13 +184,13 @@
                                 <input value="" class="form-control" id="anneescolaire" readonly>
                             </div>
                             <div class="form-group">
-                                <label for="nom-grp-eleve">Nom groupe eleve</label>
-                                <input value="" class="form-control" id="nom-grp-eleve">
+                                <label for="nom-grp-affect-etu">Nom groupe eleve</label>
+                                <input value="" class="form-control" id="nom-grp-affect-etu">
                             </div>
                             <div class="form-group">
-                                <label for="grp-affect" class="control-label">Selectionnez l'enseignant</label>
+                                <label for="grp-affect-etu" class="control-label">Selectionnez le groupe</label>
                                 <div class="input-group select2-bootstrap-append">
-                                    <select id="grp-affect" class="form-control select2">
+                                    <select id="grp-affect-etu" class="form-control select2">
                                         <option></option>
                                         <option th:each="g : ${groups}" th:value="${g.id}"
                                                 th:text="${g.nomGroupe}"></option>
@@ -188,7 +198,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="niveau-affect" class="control-label">Selectionnez l'enseignant</label>
+                                <label for="niveau-affect" class="control-label">Selectionnez le niveau</label>
                                 <div class="input-group select2-bootstrap-append">
                                     <select id="niveau-affect" class="form-control select2">
                                         <option></option>
@@ -202,6 +212,8 @@
                                 <div class="input-group select2-bootstrap-append">
                                     <select id="etudiants-affect" class="form-control select2" multiple>
                                         <option></option>
+                                        <option th:each="et:${etu}" th:value="${et.id}"
+                                                th:text="${et.getFullName()}"></option>
                                     </select>
                                 </div>
                             </div>
@@ -211,7 +223,36 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-outline dark">Close</button>
-                    <button type="button" class="btn green" id="save-affect">Save changes</button>
+                    <button type="button" class="btn green" id="save-affect-etu">Save changes</button>
+                </div>
+            </div>
+            <div id="add-affect-etu" class="modal fade" tabindex="-1" data-width="760">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Responsive</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Ajouter etudiants au groupe</h4>
+                            <div class="form-group">
+                                <label for="etudiants-affect-etu" class="control-label">Selectionnez les
+                                    etudiants</label>
+                                <div class="input-group select2-bootstrap-append">
+                                    <select id="etudiants-affect-etu" class="form-control select2" multiple>
+                                        <option></option>
+                                        <option th:each="et:${etu}" th:value="${et.id}"
+                                                th:text="${et.getFullName()}"></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-outline dark">Close</button>
+                    <button type="button" class="btn green" id="save-add-affect-etu">Save changes</button>
                 </div>
             </div>
 

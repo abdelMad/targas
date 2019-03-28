@@ -453,7 +453,7 @@ jQuery(function ($) {
      */
     /**
      * Debut Niveau page
-      */
+     */
     var $saveNiveau = $('#save-niveau');
     if ($saveNiveau.length) {
         var data = {};
@@ -488,7 +488,7 @@ jQuery(function ($) {
         });
         $saveNiveau.on('click', function () {
             data.nom = $('#nom-niveau').val();
-            if (data.nom !== '' ) {
+            if (data.nom !== '') {
                 util.postJson('/niveaux/enregistrer', JSON.stringify(data), function (response) {
                     if (response.length && response[0] === 'ok') {
                         alert('Enregistrement effectue');
@@ -503,7 +503,7 @@ jQuery(function ($) {
     }
     /**
      * Fin Niveau page
-      */
+     */
     /**
      * Affectation page
      */
@@ -640,5 +640,77 @@ jQuery(function ($) {
     }
     /**
      * Fin Emploi page
+     */
+
+    /**
+     * Affectation etudiant begin page
+     */
+    var $saveAffectEtu = $('#save-affect-etu');
+    if ($saveAffectEtu.length) {
+
+        $('#ajouter-affect-etu').on('click', function (e) {
+            e.preventDefault();
+            $('#anneescolaire').val($('#annee-scolaire-affect option:selected').html());
+
+        });
+        $('.select2').select2({dropdownAutoWidth: 'true', width: '100%', placeholder: ' '});
+        $saveAffectEtu.on('click', function (e) {
+            e.preventDefault();
+            var data = {
+                as: $('#anneescolaire').val(),
+                nom: $('#nom-grp-affect-etu').val(),
+                grp: $('#grp-affect-etu').val(),
+                niveau: $('#niveau-affect').val(),
+                etudiants: $('#etudiants-affect').val()
+
+            };
+            console.log(data);
+            util.postJson('/affectation/eleves/save', JSON.stringify(data), function (response) {
+                if (response.length && response[0] === 'ok') {
+                    alert('Enregistrement effectue');
+                    location.reload();
+                } else if (response.length && response[0] === '-1') {
+                    alert('Groupe etudiant existe deja');
+                }
+            });
+
+        });
+        $('.supprimer-affect-etu').on('click', function (e) {
+            e.preventDefault();
+            var data = JSON.stringify({
+                id: $(this).data('id')
+            });
+            if (confirm("Etes vous sur de vouloir supprimer l'etudiant de ce groupe?")) {
+                util.postJson('/affectation/eleves/supprimer', data, function (response) {
+                    if (response.length && response[0] === 'ok') {
+                        alert('etudiant retire avec succes');
+                        location.reload();
+                    }
+                })
+            }
+        });
+        $('#affect-etu').on('click', function (e) {
+            e.preventDefault();
+            data = {
+                id:  $(this).parent().parent().data('id'),
+                etudiants: []
+            };
+        });
+        $('#save-add-affect-etu').on('click', function (e) {
+            e.preventDefault();
+            console.log(data);
+            data.etudiants = $('#etudiants-affect-etu').val();
+            console.log(data);
+            util.postJson('/affectation/eleves/affect', JSON.stringify(data), function (response) {
+                if (response.length && response[0] === 'ok') {
+                    alert('Enregistrement effectue');
+                    location.reload();
+                }
+            });
+
+        })
+    }
+    /**
+     * Affectation etudiant end page
      */
 });
